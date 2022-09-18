@@ -28,8 +28,9 @@ router.post("/", async (request, response) => {
   const authHeader = request.get("Authorization")
   const authUser = await getUserFromAuthHeader(authHeader)
 
-  if (authHeader && !authUser) {
-    return response.status(403).json({ error: "Not authorized" })
+  if (!authUser) {
+    response.status(403).json({ error: "Not authorized" })
+    return
   }
 
   const [snippetId] = await knex("snippets").insert({
